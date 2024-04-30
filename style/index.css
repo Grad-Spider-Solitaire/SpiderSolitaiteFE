@@ -1,0 +1,73 @@
+@import "../components/card/card.css";
+@import "../components/board/board.css";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    appearance: none;
+    text-align: inherit;
+    border: none;
+    background: none;
+}
+
+:root {
+    --color: black;
+    --card-width: min(9vw, 16vh);
+    --card-ratio: 2.5/3.5;
+    --card-height: calc(var(--card-width) / (var(--card-ratio)));
+    min-height: 100vh;
+    max-width: 100vw;
+    color-scheme: dark;
+}
+
+.container {
+    display: flex;
+}
+
+.container-v {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.container-h {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.container-vh, .container-hv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.v-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.v-container-v {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.v-container-h {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.v-container-vh, .v-container-hv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

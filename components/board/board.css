@@ -1,0 +1,41 @@
+.board {
+    padding: 1rem;
+    gap: 1vw;
+
+    &>* {
+        min-width: var(--card-width);
+        min-height: var(--card-height);
+
+        &>button {
+            --x-rotation: 0;
+            --y-rotation: 0;
+
+            &.empty {
+                aspect-ratio: var(--card-ratio);
+            }
+
+            &:focus,
+            &:hover:not(:disabled) {
+                scale: 105%;
+                &>.card {
+                    transform: rotateX(var(--x-rotation)) rotateY(var(--y-rotation));
+                }
+
+                &:not(:active) {
+                    cursor: grab;
+                }
+            }
+
+            &:active {
+                cursor: grabbing;
+            }
+        }
+
+        &>* {
+            transition: scale 50ms ease-in;
+            &:not(:first-child){
+                margin-top: calc((var(--card-height) - var(--card-height) / 5) * -1);
+            }
+        }
+    }
+}
