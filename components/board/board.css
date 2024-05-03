@@ -12,6 +12,8 @@
 
             &.empty {
                 aspect-ratio: var(--card-ratio);
+                background: rgba(255, 255, 255, 10%);
+                border-radius: .5em;
             }
 
             &:focus,
@@ -24,6 +26,10 @@
                 &:not(:active) {
                     cursor: grab;
                 }
+            }
+
+            &:disabled {
+                cursor: no-drop;
             }
 
             &:active {
