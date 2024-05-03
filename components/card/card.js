@@ -1,3 +1,5 @@
+import {initHandlers} from "../../src/eventHandlers.js";
+
 /**
  * @property {'spades'|'hearts'|'clubs'|'diamonds'} name
  * @property {string} color
@@ -57,7 +59,7 @@ const getBody = async ({suit, value}) => {
 
 /**
  * @param {Card} card
- * @returns {Promise<HTMLDivElement>}
+ * @returns {Promise<HTMLButtonElement>}
  */
 export const createCardElement = ({suit, value}) => {
   return fetch('/components/card/card.html')
@@ -70,7 +72,25 @@ export const createCardElement = ({suit, value}) => {
       wrapper.type = 'button';
       wrapper.className = 'card-wrapper';
       wrapper.innerHTML = card;
-      wrapper.style.setProperty('--color', suit.color)
+      wrapper.style.setProperty('--color', suit.color);
+      initHandlers(wrapper);
       return wrapper;
     });
+}
+
+/**
+ *
+ * @param {HTMLButtonElement} element
+ * @param {boolean} down
+ */
+export const flipCard = (element, down = true) => {
+  if (down) {
+    element.disabled = true;
+    element.style.pointerEvents = 'none';
+    element.children.item(0).style.rotate = 'Y .5turn';
+  } else {
+    element.disabled = false;
+    element.style.removeProperty('pointer-events');
+    element.children.item(0).style.removeProperty('rotate');
+  }
 }

@@ -1,5 +1,4 @@
 .board {
-    padding: 1rem;
     gap: 1vw;
 
     &>* {
@@ -9,6 +8,15 @@
         &>button {
             --x-rotation: 0;
             --y-rotation: 0;
+
+            &:focus-visible {
+                outline: none;
+
+                & .card::after,
+                & .card {
+                    outline: 1px solid white;
+                }
+            }
 
             &.empty {
                 aspect-ratio: var(--card-ratio);
@@ -32,7 +40,7 @@
                 cursor: no-drop;
             }
 
-            &:active {
+            &:active:not(:disabled) {
                 cursor: grabbing;
             }
         }

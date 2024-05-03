@@ -1,0 +1,32 @@
+#deck {
+    min-width: var(--card-width);
+    min-height: var(--card-height);
+    flex-direction: column-reverse;
+    position: relative;
+    background: rgba(255, 255, 255, 20%);
+    border-radius: .5em;
+
+    &:focus-visible {
+        outline: none;
+
+        &>*:last-child .card::after {
+            outline: 1px solid white;
+        }
+    }
+
+    &:focus,
+    &:hover {
+        &>* {
+            scale: 110%;
+        }
+    }
+
+    &>* {
+        cursor: pointer;
+        transition: scale 50ms ease-in;
+
+        &:not(:last-child) {
+            margin-top: calc(var(--card-height) * -.998);
+        }
+    }
+}
