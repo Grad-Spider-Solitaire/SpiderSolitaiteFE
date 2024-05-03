@@ -6,6 +6,10 @@
     background: rgba(255, 255, 255, 20%);
     border-radius: .5em;
 
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
     &:focus-visible {
         outline: none;
 
@@ -22,7 +26,6 @@
     }
 
     &>* {
-        cursor: pointer;
         transition: scale 50ms ease-in;
 
         &:not(:last-child) {

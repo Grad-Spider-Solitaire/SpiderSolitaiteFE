@@ -53,3 +53,21 @@
         }
     }
 }
+
+@media screen and (orientation: portrait) {
+    .board {
+        flex-wrap: wrap;
+
+        &>.v-container {
+            flex: 1 0 40%;
+            flex-direction: row;
+
+            &>* {
+                &:not(:first-child){
+                    margin-top: 0;
+                    margin-left: calc(var(--card-width) * -.85);
+                }
+            }
+        }
+    }
+}

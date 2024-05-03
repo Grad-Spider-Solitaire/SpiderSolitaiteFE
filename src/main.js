@@ -12,7 +12,7 @@ const difficulty = window.confirm('1') ? 1 : window.confirm('2') ? 2 : 4;
 const cards = Array.from({length: 8}, (_, i) => Array.from({length: 13}, (_, value) => ({suit: suits.at(i % difficulty), value: value + 1}))).flat();
 
 /**
- * @type {Array<Card>}
+ * @type {Array<{card: Card, element: HTMLButtonElement}>}
  */
 
 const deck = await Promise.all(cards.map(async card => ({card, element: await createCardElement(card)})));
@@ -49,6 +49,7 @@ deckDom.addEventListener('click', () => {
     col.push(card);
     validateForSelect(col);
   });
+  if (deck.length === 0) deckDom.style.pointerEvents = 'none';
 });
 
 const boardTemplate = document.createElement('template');

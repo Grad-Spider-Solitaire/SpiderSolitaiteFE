@@ -161,6 +161,7 @@ export const initHandlers = element => {
    * @param {TouchEvent|MouseEvent} event
    */
   const onGrabStart = event => {
+    event.preventDefault();
     if (event instanceof MouseEvent && event.button !== 0) return;
     click = event instanceof TouchEvent ? event.touches.item(0) : event;
     let styledElement = element;
