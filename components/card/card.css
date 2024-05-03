@@ -21,7 +21,7 @@
     width: var(--card-width);
     aspect-ratio: var(--card-ratio);
     padding: var(--padding);
-    transition: all ease-out 100ms;
+    transition: all ease-out 100ms, rotate ease-out 1s;
     border-radius: var(--padding);
     background-color: floralwhite;
     background-image: linear-gradient(120deg, transparent, transparent, rgba(255, 255, 255, 50%), transparent, transparent);

@@ -15,6 +15,7 @@ button {
 }
 
 :root {
+    overflow: hidden;
     --color: black;
     --card-width: min(9vw, 16vh);
     --card-ratio: 2.5/3.5;
