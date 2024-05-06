@@ -8,9 +8,8 @@
     <section class="heading">
       <button class="logoutButton" onclick="log()">↩️Logout</button>
       <h1 class="title">Game of Spider</h1>
-      <p class="time">
-        <span id="minutes">00</span>:<span id="seconds">00</span>:<span id="tens">00</span>
-      </p>
+      <p class="time" id="timerDisplay">00:00:00</p>
+
     </section>
     <ul class="board container-h">
       <li class="v-container"></li>
@@ -26,5 +25,5 @@
     </ul>
   </body>
   <script defer src="src/OAuth.js"></script>
-  <script defer src="src/board.js"></script>
+  <script type="module" defer src="src/timer.js"></script>
 </html>
