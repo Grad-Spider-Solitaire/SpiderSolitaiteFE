@@ -4,44 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style/index.css" />
-    <script type="module" src="src/main.js"></script>
+    <script type="module" defer src="src/main.js"></script>
+    <script defer src="src/OAuth.js"></script>
+    <script defer src="src/board.js"></script>
+
     <title>Spoder Web</title>
   </head>
   <body class="v-container" onload="getJWT()">
-    <p id="name"></p>
-    <script>
-      const getJWT = () => {
-        if (location.hash) {
-          const hashParams = new URLSearchParams(location.hash.substring(1)); // Remove the '#' and parse hash fragment
-          const idToken = hashParams.get("id_token");
-          console.log("User ID token:", idToken);
-
-          const accessToken = hashParams.get("access_token");
-          console.log("Access token:", accessToken);
-
-          localStorage.setItem("idToken", idToken);
-          localStorage.setItem("accessToken", accessToken);
-
-          // window.history.pushState({}, document.title, "/" + "index.html")
-
-          fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
-            .then((data) => data.json())
-            .then((info) => {
-              console.log(info);
-              console.log(info.name);
-
-              let nameTag = document.getElementById("name");
-
-              nameTag.innerHTML = `You are logged in as: ${info.name}`;
-            });
-        } else {
-          console.log("No hash fragment found in location.hash");
-        }
-      };
-    </script>
   </body>
 </html>

@@ -89,6 +89,11 @@ export const initBoardHandlers = () => {
   let target;
   let click;
 
+
+
+//
+
+
   boardState.forEach((value, index) => {
     value.forEach(({element}, i, array) => {
 

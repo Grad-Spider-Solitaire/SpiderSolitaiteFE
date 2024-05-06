@@ -1,12 +1,30 @@
-<ul class='board container-h'>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-    <li class="v-container"></li>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <section class="heading">
+      <button class="logoutButton" onclick="log()">↩️Logout</button>
+      <h1 class="title">Game of Spider</h1>
+      <p class="time">
+        <span id="minutes">00</span>:<span id="seconds">00</span>:<span id="tens">00</span>
+      </p>
+    </section>
+    <ul class="board container-h">
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+      <li class="v-container"></li>
+    </ul>
+  </body>
+  <script defer src="src/OAuth.js"></script>
+  <script defer src="src/board.js"></script>
+</html>
