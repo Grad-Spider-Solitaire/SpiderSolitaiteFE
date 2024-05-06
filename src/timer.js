@@ -1,6 +1,12 @@
-let totalMilliseconds = 0;
+export let totalMilliseconds = 0;
+let timerInterval = null;
 
 function startTimer() {
+    // Clear any existing timer before starting a new one
+    if (timerInterval !== null) {
+        clearInterval(timerInterval);
+    }
+
     const updateTimer = () => {
         totalMilliseconds += 10;  // Increment by 10 every 10 milliseconds
         let tens = Math.floor((totalMilliseconds % 1000) / 10);
@@ -14,9 +20,24 @@ function startTimer() {
         document.getElementById('timerDisplay').textContent = `⏱️${formattedMinutes}:${formattedSeconds}:${formattedTens}`;
     };
 
-    setInterval(updateTimer, 10);
+    // Start the timer
+    timerInterval = setInterval(updateTimer, 10);
 }
 
-document.addEventListener('DOMContentLoaded', startTimer);
+function stopTimer() {
+    if (timerInterval !== null) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        console.log(`Timer stopped at: ${totalMilliseconds}ms`);
+    }
+}
+export { startTimer, stopTimer };
+//document.addEventListener('DOMContentLoaded', startTimer);
+document.addEventListener('DOMContentLoaded', () => {
+    startTimer();
+    // Can add logic here for stopping timer upon game end.
+});
+
+
 
 
