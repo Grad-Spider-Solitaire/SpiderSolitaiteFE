@@ -9,6 +9,10 @@
         cursor: pointer;
     }
 
+    &:disabled {
+        cursor: not-allowed;
+    }
+
     &:focus-visible {
         outline: none;
 
@@ -26,7 +30,7 @@
 
     &>* {
         --transition-duration-ms: 1000ms;
-        transition: all var(--transition-duration-ms) ease-out, scale 50ms ease-in;
+        transition: all var(--transition-duration-ms) ease-out, scale 50ms ease-in, margin 0s linear;
 
         &:not(:last-child) {
             margin-top: calc(var(--card-height) * -.998);

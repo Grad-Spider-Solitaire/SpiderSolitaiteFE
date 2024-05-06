@@ -19,8 +19,6 @@ const cards = Array.from({length: 8}, (_, i) => Array.from({length: 13}, (_, val
 const deck = await Promise.all(cards.map(async card => ({card, element: await createCardElement(card)})));
 deck.sort(() => Math.random() - .5); // shuffling
 
-const initialDeal = Array.from({length: 10}, () => deck.pop());
-
 /**
  * @type {Array<Array<{card: Card, element: HTMLButtonElement}>>}
  */
@@ -32,38 +30,66 @@ deck.forEach(({element}) => {
   deckDom.appendChild(element);
 });
 
-deckDom.addEventListener('click', event => {
-  deckDom.style.pointerEvents = 'none';
-  event.target.blur();
-  boardState.forEach((col, index, array) => {
+/**
+ *
+ * @param {number} cards
+ * @param {number} [down]
+ */
+const deal = (cards, down = 0) => {
+  deckDom.style.pointerEvents = 'none'
+  const deals = [];
+  for (let index = 0; index < cards; index++) {
     const card = deck.pop();
+    if (!card) break;
+    const col = boardState.at(index % boardState.length);
+    const last = col.at(-1);
+    const dealRow = Math.floor(index / boardState.length) + (last.card ? 1 : 0);
     const transitionDuration = 1000;
     card.element.style.setProperty('--transition-duration-ms', `${transitionDuration}ms`);
-    cardMoveStyling(card.element);
+    const originalPos = card.element.getBoundingClientRect();
     card.element.style.margin = '0';
-    const last = col.at(-1);
-    setTimeout(() => {
-      flipCard(card.element, false);
-      const yOffset = `calc(${last.element.getBoundingClientRect().top}px + ${!last.card ? '0px' : 'calc(var(--card-height) * .2)'})`;
-      moveCard(card.element, `${last.element.getBoundingClientRect().left}px`, yOffset);
+    cardMoveStyling(card.element);
+    card.element.style.top = `${originalPos.top}px`;
+    card.element.style.left = `${originalPos.left}px`;
+    deals.push(new Promise((resolve) => {
       setTimeout(() => {
+        card.element.style.zIndex = `${1 + index}`;
+        flipCard(card.element, down > index);
+        const yOffset = `calc(${last.element.getBoundingClientRect().top}px + calc(var(--card-height) * .2 * ${dealRow}))`;
+        moveCard(card.element, `${last.element.getBoundingClientRect().left}px`, yOffset);
+        setTimeout(() => {
+          resolve({col, card, last});
+        }, transitionDuration);
+      }, 150 * index);
+    }));
+  }
+  return Promise.all(deals)
+    .then((dealt) => {
+      dealt.forEach(({col, card, last}) => {
         const colDom = last.element.parentElement;
+        col.push(card);
         cardMoveStyling(card.element, false);
         card.element.style.removeProperty('margin');
-        if (!last.card) {
-          colDom.removeChild(last.element);
-          col.pop();
-        }
         colDom.appendChild(card.element);
-        col.push(card);
-        validateForSelect(col);
-        if (index +1 === array.length && deck.length !== 0) {
-          deckDom.style.removeProperty('pointer-events');
+      });
+  })
+    .then(() => {
+      deckDom.style.removeProperty('pointer-events');
+      if (!deck.length) deckDom.disabled = true;
+      boardState.forEach(col => {
+        if (col.length > 1 && !col.at(0).card) {
+          const empty = col.shift();
+          empty.element.parentElement.removeChild(empty.element);
         }
-      }, transitionDuration);
-    }, 150 * index);
-  });
-  if (deck.length === 0) deckDom.style.pointerEvents = 'none';
+        validateForSelect(col);
+      });
+    });
+}
+
+deckDom.addEventListener('click', event => {
+  event.target.blur();
+  boardState.forEach(col => col.forEach(({element}) => element.disabled = true));
+  return deal(10);
 });
 
 const boardTemplate = document.createElement('template');
@@ -72,13 +98,9 @@ const board = boardTemplate.content.cloneNode(true);
 document.body.appendChild(board);
 const [boardDom] = document.getElementsByClassName('board');
 
-initialDeal.forEach((value, index) => {
-  boardState.at(index % boardState.length).push(value);
+boardState.forEach((col, index) => {
+  const colDom = boardDom.children.item(index);
+  col.push({card: null, element: colDom.firstElementChild});
 });
 
-boardState.forEach((col, index) => {
-  col.forEach(({element}, i, array) => {
-    flipCard(element, i + 1 !== array.length);
-    boardDom.children.item(index).appendChild(element)
-  });
-})
+await deal(54, 44);
