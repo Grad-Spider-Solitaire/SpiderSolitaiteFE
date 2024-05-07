@@ -5,7 +5,7 @@ data "aws_vpc" "main" {
 }
 
 data "aws_subnet" "public_subnet_eu_west_1a" {
-  vpc_id = data.aws_vpc.main  // Assuming you have stored VPC information in the module output
+  vpc_id = data.aws_vpc.main // Assuming you have stored VPC information in the module output
   filter {
     name   = "tag:Name"
     values = ["main-vpc-public-eu-west-1a"]
