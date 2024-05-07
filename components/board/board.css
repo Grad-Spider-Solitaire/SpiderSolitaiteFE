@@ -18,6 +18,15 @@
                 }
             }
 
+            &.collapsing {
+                --transition-duration-ms: 1000ms;
+                position: relative;
+                transition: top calc(var(--transition-duration-ms)/2) ease-out, scale calc(var(--transition-duration-ms)/2) calc(var(--transition-duration-ms)/2) linear;
+                pointer-events: none;
+                top: 0;
+                scale: 0;
+            }
+
             &.empty {
                 aspect-ratio: var(--card-ratio);
                 background: rgba(255, 255, 255, 10%);

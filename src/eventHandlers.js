@@ -32,8 +32,21 @@ export const validateForSelect = col => {
 
   if (col.length >= 13 && col.slice(-13).every(checkSeries)) {
     const suit = col.splice(-13);
-    if (col.length === 0) createEmpty(col, suit.at(0).element.parentElement);
-    suit.forEach(({element}) => element.parentElement.removeChild(element));
+    const colDom = suit.at(0).element.parentElement;
+    const transition = 1000;
+    if (col.length === 0) setTimeout(() => createEmpty(col, colDom), transition + 50);
+    const target = suit.at(0).element.getBoundingClientRect();
+    suit.forEach(({element}) => {
+      const current = element.getBoundingClientRect();
+      element.className += ' collapsing';
+      element.style.setProperty('--transition-duration-ms', `${transition}ms`);
+      setTimeout(() => {
+        element.style.top = `${target.top - current.top}px`; // in a timeout so transition occurs
+      }, 0);
+      setTimeout(() => {
+        element.remove();
+      }, transition);
+    });
     addScore(suitCompleteScore);
   }
   col.toReversed().forEach(({element, card}, index, array) => {
