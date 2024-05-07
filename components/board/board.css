@@ -64,7 +64,7 @@
 }
 
 @media screen and (orientation: portrait) {
-    .board {
+    #board {
         flex-wrap: wrap;
 
         &>.v-container {
