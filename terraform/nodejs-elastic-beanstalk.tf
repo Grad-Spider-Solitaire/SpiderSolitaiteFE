@@ -4,17 +4,18 @@ data "aws_vpc" "main" {
   }
 }
 
-data "aws_subnet" "subneta" {
+data "aws_subnet" "public_subnet_eu_west_1a" {
+  vpc_id = data.aws_vpc.main  // Assuming you have stored VPC information in the module output
   filter {
-    name   = "tag:main-vpc-public-eu-west-1a"
-    values = ["subnet"]
+    name   = "tag:Name"
+    values = ["main-vpc-public-eu-west-1a"]
   }
 }
-
-data "aws_subnet" "subnetb" {
+data "aws_subnet" "public_subnet_eu_west_1b" {
+  vpc_id = data.aws_vpc.main // Assuming you have stored VPC information in the module output
   filter {
-    name   = "tag:main-vpc-public-eu-west-1b"
-    values = ["subnet"]
+    name   = "tag:Name"
+    values = ["main-vpc-public-eu-west-1b"]
   }
 }
 
@@ -57,7 +58,7 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "Subnets"
-    value     = "${data.aws_subnet.subneta.id},${data.aws_subnet.subnetb.id}"
+    value     = "${data.aws_subnet.public_subnet_eu_west_1a.id},${data.aws_subnet.public_subnet_eu_west_1b.id}"
   }
   setting {
     namespace = "aws:ec2:instances"
