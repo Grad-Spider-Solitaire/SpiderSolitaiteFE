@@ -2,7 +2,9 @@
 let score = 0;
 
 export function addScore(number) {
-  return score += number;
+  score += number;
+  document.getElementById('score').innerText = `Score: ${score}`;
+  return score;
 }
 
 export const uncoveredScore = 10;

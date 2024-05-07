@@ -17,7 +17,7 @@ function startTimer() {
         let formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
         let formattedTens = tens < 10 ? '0' + tens : tens;
 
-        document.getElementById('timerDisplay').textContent = `⏱️${formattedMinutes}:${formattedSeconds}:${formattedTens}`;
+        document.getElementById('timer').textContent = `⏱️${formattedMinutes}:${formattedSeconds}:${formattedTens}`;
     };
 
     // Start the timer
@@ -31,13 +31,5 @@ function stopTimer() {
         console.log(`Timer stopped at: ${totalMilliseconds}ms`);
     }
 }
+
 export { startTimer, stopTimer };
-//document.addEventListener('DOMContentLoaded', startTimer);
-document.addEventListener('DOMContentLoaded', () => {
-    startTimer();
-    // Can add logic here for stopping timer upon game end.
-});
-
-
-
-

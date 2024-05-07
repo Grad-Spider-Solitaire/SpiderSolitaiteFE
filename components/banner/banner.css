@@ -1,0 +1,14 @@
+#banner {
+    align-self: center;
+    gap: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    &>h1 {
+        text-align: center;
+        font-size: 2rem;
+        margin: 0;
+    }
+}
