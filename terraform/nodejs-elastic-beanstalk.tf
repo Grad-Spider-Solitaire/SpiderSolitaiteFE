@@ -4,6 +4,20 @@ data "aws_vpc" "main" {
   }
 }
 
+data "aws_subnet" "subneta" {
+  filter {
+    name = "tag:main-vpc-public-eu-west-1a"
+    values = ["subnet"]
+  }
+}
+
+data "aws_subnet" "subnetb" {
+  filter {
+    name = "tag:main-vpc-public-eu-west-1b"
+    values = ["subnet"]
+  }
+}
+
 resource "aws_iam_role" "beanstalk_ec2" {
   assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}"
   description           = "Allows EC2 instances to call AWS services on your behalf."
@@ -43,7 +57,7 @@ resource "aws_elastic_beanstalk_environment" "nodejs_env" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "Subnets"
-    value     = join(",", data.aws_vpc.main.public_subnets)
+    value     = "${data.aws_subnet.subneta.id},${data.aws_subnet.subnetb.id}"
   }
   setting {
     namespace = "aws:ec2:instances"
