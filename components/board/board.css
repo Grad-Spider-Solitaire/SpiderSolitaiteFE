@@ -28,7 +28,6 @@ section.heading {
     position: relative;
 }
 .board {
-    padding: 1rem;
     gap: 1vw;
 
     &>* {
@@ -38,6 +37,24 @@ section.heading {
         &>button {
             --x-rotation: 0;
             --y-rotation: 0;
+
+            &:focus-visible {
+                outline: none;
+
+                & .card::after,
+                & .card {
+                    outline: 1px solid white;
+                }
+            }
+
+            &.collapsing {
+                --transition-duration-ms: 1000ms;
+                position: relative;
+                transition: top calc(var(--transition-duration-ms)/2) ease-out, scale calc(var(--transition-duration-ms)/2) calc(var(--transition-duration-ms)/2) linear;
+                pointer-events: none;
+                top: 0;
+                scale: 0;
+            }
 
             &.empty {
                 aspect-ratio: var(--card-ratio);
@@ -61,7 +78,7 @@ section.heading {
                 cursor: no-drop;
             }
 
-            &:active {
+            &:active:not(:disabled) {
                 cursor: grabbing;
             }
         }
@@ -70,6 +87,24 @@ section.heading {
             transition: scale 50ms ease-in;
             &:not(:first-child){
                 margin-top: calc((var(--card-height) - var(--card-height) / 5) * -1);
+            }
+        }
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .board {
+        flex-wrap: wrap;
+
+        &>.v-container {
+            flex: 1 0 40%;
+            flex-direction: row;
+
+            &>* {
+                &:not(:first-child){
+                    margin-top: 0;
+                    margin-left: calc(var(--card-width) * -.85);
+                }
             }
         }
     }
