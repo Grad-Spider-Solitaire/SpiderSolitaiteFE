@@ -1,3 +1,9 @@
+data "aws_vpc" "main" {
+  tags = {
+    Name = "main-vpc"
+  }
+}
+
 resource "aws_iam_role" "beanstalk_ec2" {
   assume_role_policy    = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}"
   description           = "Allows EC2 instances to call AWS services on your behalf."
