@@ -1,15 +1,48 @@
 import {boardState} from "./main.js";
 import {getSelectedCard, getSelectedCol} from "./selected.js";
 import {flipCard} from "../components/card/card.js";
+import {addScore, emptyColScore, suitCompleteScore, uncoveredScore} from "./scoring.js";
+
+const createEmpty = (col, dom) => {
+  const empty = document.createElement('button');
+  empty.className = 'empty';
+  empty.disabled = true;
+  dom.appendChild(empty);
+  col.push({element: empty, card: null});
+
+}
 
 /**
- * @param {Array<{card: Card, element: HTMLButtonElement}>}col
+ * @param {Array<{card: Card, element: HTMLButtonElement}>} col
  */
 export const validateForSelect = col => {
+  /**
+   * @param {object} cardState
+   * @param {Card} cardState.card
+   * @param {HTMLButtonElement} cardState.element
+   * @param {number} index
+   * @param {Array<{card: Card, element: HTMLButtonElement}>}array
+   * @returns {boolean}
+   */
+  const checkSeries = ({card, element}, index, array) => {
+    if (element.children.item(0).style.getPropertyValue('rotate')) return false; // covered cards not included
+    if (index === 0) return true; // start of series
+    return card.value + 1 === array.at(index - 1).card.value && card.suit === array.at(index - 1).card.suit;
+  }
+
+  if (col.length >= 13 && col.slice(-13).every(checkSeries)) {
+    const suit = col.splice(-13);
+    if (col.length === 0) createEmpty(col, suit.at(0).element.parentElement);
+    suit.forEach(({element}) => element.parentElement.removeChild(element));
+    addScore(suitCompleteScore);
+  }
   col.toReversed().forEach(({element, card}, index, array) => {
     if (!card) element.disabled = true;
-    else if (index === 0) flipCard(element, false);
-    else if (element.style.getPropertyValue('rotate')) flipCard(element);
+    else if (index === 0) {
+      if (element.children.item(0).style.getPropertyValue('rotate')) addScore(uncoveredScore + (array.length === 1 ? emptyColScore : 0));
+      flipCard(element, false);
+    }
+    else if (element.children.item(0).style.getPropertyValue('rotate')) flipCard(element);
     else if (array.at(index -1).element.disabled) {
       element.disabled = true;
     }
@@ -65,11 +98,7 @@ const handleMove = (from, to) => {
   const toColDom = to.parentElement;
   const cards = fromCol.splice(fromCol.indexOf(selected));
   if (fromCol.length === 0) {
-    const empty = document.createElement('button');
-    empty.className = 'empty';
-    empty.disabled = true;
-    fromColDom.appendChild(empty);
-    fromCol.push({element: empty, card: null});
+    createEmpty(fromCol, fromColDom);
   }
 
   if (toEmpty) {
