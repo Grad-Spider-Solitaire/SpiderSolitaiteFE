@@ -6,14 +6,14 @@ data "aws_vpc" "main" {
 
 data "aws_subnet" "subneta" {
   filter {
-    name = "tag:main-vpc-public-eu-west-1a"
+    name   = "tag:main-vpc-public-eu-west-1a"
     values = ["subnet"]
   }
 }
 
 data "aws_subnet" "subnetb" {
   filter {
-    name = "tag:main-vpc-public-eu-west-1b"
+    name   = "tag:main-vpc-public-eu-west-1b"
     values = ["subnet"]
   }
 }
