@@ -28,7 +28,7 @@ resource "aws_iam_role" "beanstalk_ec2" {
   path                  = "/"
 }
 
-resource "aws_iam_instance_profile" "beanstalk__ec2" {
+resource "aws_iam_instance_profile" "beanstalk_ec2" {
   name = "aws-frontend-elasticbeanstalk-ec2-profile"
   role = aws_iam_role.beanstalk_ec2.name
 }
