@@ -1,29 +1,18 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const fs = require("fs");
-const html = fs.readFileSync("frontend/index.html");
+const express = require('express');
+const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-const log = function (entry) {
-  fs.appendFileSync(
-    "/tmp/sample-app.log",
-    new Date().toISOString() + " - " + entry + "\n"
-  );
-};
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'static')));
 
-// Middleware to parse JSON bodies
-app.use(bodyParser.json());
-
-// Endpoint for serving HTML content
-app.get("/", (req, res) => {
-  res.writeHead(200);
-  res.write(html);
-  res.end();
+// Serve index.html when a request is made to the root URL
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://127.0.0.1:${port}/`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
