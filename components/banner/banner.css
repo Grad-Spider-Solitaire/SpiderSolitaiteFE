@@ -11,6 +11,17 @@
         font-size: 2rem;
         margin: 0;
     }
+
+    &>button {
+        padding: .5em;
+        border-radius: 2em;
+        background: rgba(255, 255, 255, 20%);
+
+        &:hover,
+        &:focus {
+            scale: 110%;
+        }
+    }
 }
 
 @media screen and (orientation: portrait) {

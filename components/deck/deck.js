@@ -1,4 +1,3 @@
-import {cardMoveStyling, moveCard} from "../../src/styling.js";
 import {flipCard} from "../card/card.js";
 import {validateForSelect} from "../../src/eventHandlers.js";
 import {boardState, deck} from "../../src/main.js";
@@ -37,16 +36,17 @@ export const deal = (cards, down = 0) => {
       const transitionDuration = 1000;
       card.element.style.setProperty('--transition-duration-ms', `${transitionDuration}ms`);
       const originalPos = card.element.getBoundingClientRect();
-      card.element.style.margin = '0';
-      cardMoveStyling(card.element);
-      card.element.style.top = `${originalPos.top}px`;
-      card.element.style.left = `${originalPos.left}px`;
+      card.element.style.setProperty('--y-offset', `${originalPos.top}px`);
+      card.element.style.setProperty('--x-offset', `${originalPos.left}px`);
       deals.push(new Promise((resolve) => {
         setTimeout(() => {
+          card.element.style.margin = '0';
+          card.element.className += ' dealing';
+          card.element.style.setProperty('--deal-row', `${dealRow}`);
           card.element.style.zIndex = `${1 + index}`;
           flipCard(card.element, down > index);
-          const yOffset = `calc(${last.element.getBoundingClientRect().top}px + calc(var(--card-height) * .2 * ${dealRow}))`;
-          moveCard(card.element, `${last.element.getBoundingClientRect().left}px`, yOffset);
+          card.element.style.setProperty('--y-offset', `${last.element.getBoundingClientRect().top}px`);
+          card.element.style.setProperty('--x-offset', `${last.element.getBoundingClientRect().left}px`);
           setTimeout(() => {
             resolve({col, card, last});
           }, transitionDuration);
@@ -58,8 +58,13 @@ export const deal = (cards, down = 0) => {
         dealt.forEach(({col, card, last}) => {
           const colDom = last.element.parentElement;
           col.push(card);
-          cardMoveStyling(card.element, false);
+          card.element.style.removeProperty('--y-offset');
+          card.element.style.removeProperty('--transition-duration-ms');
+          card.element.style.removeProperty('--x-offset');
+          card.element.style.removeProperty('--deal-row');
+          card.element.style.removeProperty('z-index');
           card.element.style.removeProperty('margin');
+          card.element.className = card.element.className.replace(' dealing', '');
           colDom.appendChild(card.element);
         });
       })

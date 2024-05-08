@@ -32,8 +32,30 @@
         --transition-duration-ms: 1000ms;
         transition: all var(--transition-duration-ms) ease-out, scale 50ms ease-in, margin 0s linear;
 
+        &.dealing {
+            margin: 0;
+            position: absolute;
+            --deal-row: 0;
+            --x-offset: 0;
+            --y-offset: 0;
+            top: calc(var(--y-offset) + var(--card-height) * .2 * var(--deal-row));
+            left: var(--x-offset);
+        }
+
         &:not(:last-child) {
             margin-top: calc(var(--card-height) * -.998);
+        }
+    }
+}
+
+
+@media screen and (orientation: portrait) {
+    #deck {
+        &>* {
+            &.dealing {
+                top: var(--y-offset);
+                left: calc(var(--x-offset) + var(--card-width) * .2 * var(--deal-row));
+            }
         }
     }
 }

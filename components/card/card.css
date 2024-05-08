@@ -8,6 +8,7 @@
 }
 
 .card {
+    user-select: none;
     font-family: CardFont, serif;
     gap: calc(var(--card-width) / 40);
     --accent-1: #c8102e;
