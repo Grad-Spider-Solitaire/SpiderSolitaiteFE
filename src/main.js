@@ -1,8 +1,10 @@
 import {createCardElement, Suit, Card, flipCard} from "../components/card/card.js";
 import {createBanner} from "../components/banner/banner.js";
 import {createDeck, deal} from "../components/deck/deck.js";
-import {startTimer, stopTimer} from "./timer.js";
+import {formatTime, startTimer, stopTimer, totalMilliseconds} from "./timer.js";
 import {createBoard} from "../components/board/board.js";
+import {createLeaderboard, createRow} from "../components/leaderboard/leaderboard.js";
+import {score} from "./scoring.js";
 
 
 /**
@@ -50,4 +52,25 @@ boardState.forEach((col, index) => {
 await deal(54, 44);
 
 startTimer();
-bannerDom.children.namedItem('retire').addEventListener('click', () => stopTimer());
+bannerDom.children.namedItem('retire').addEventListener('click', (event) => {
+  event.target.blur();
+  stopTimer();
+  const leaderBoard = createLeaderboard();
+  const leaderTable = leaderBoard.querySelector('table');
+  const leaderBoardScoring = [...Array.from({length: 5}, () => ({ // TODO get from API
+    name:'john',
+    score: Math.floor(Math.random() * 990),
+    time: Math.floor(Math.random() * 100000),
+  })),
+    {name: 'Me', score, time: totalMilliseconds}].sort(({score: a}, {score: b}) => b - a); // TODO get from token
+
+  leaderBoardScoring.forEach(({score, name, time}) => {
+    leaderTable.appendChild(createRow(name, score, formatTime(time)));
+  });
+
+  const okButton = leaderBoard.querySelector('button');
+  okButton.addEventListener('click', () => {
+    leaderBoard.remove();
+    // TODO nav to select screen
+  })
+});

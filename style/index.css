@@ -2,6 +2,7 @@
 @import "../components/board/board.css";
 @import "../components/deck/deck.css";
 @import "../components/banner/banner.css";
+@import "../components/leaderboard/leaderboard.css";
 
 * {
     box-sizing: border-box;

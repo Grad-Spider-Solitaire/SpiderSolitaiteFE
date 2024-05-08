@@ -1,0 +1,44 @@
+#leaderboard {
+    padding: 1em;
+    inset: 0;
+    position: absolute;
+    background: rgba(0, 0, 0, 75%);
+
+    &>main {
+        border: 1px solid rgba(255, 255, 255, 25%);
+        align-content: flex-start;
+        justify-content: space-between;
+        min-height: 50vh;
+        min-width: 50vw;
+        gap: 1em;
+        padding: 1em;
+        background: rgba(255, 255, 255, 25%);
+        border-radius: 2em;
+
+        &>table {
+            align-self: center;
+            border-spacing: 1em .5em;
+            text-align: center;
+            border: 2px solid white;
+            border-radius: 2em;
+            padding: 1em;
+        }
+
+        &>button {
+            border: 1px solid rgba(255, 255, 255, 25%);
+            text-align: center;
+            padding: 1em;
+            border-radius: 2em;
+            background: rgba(255, 255, 255, 50%);
+        }
+    }
+}
+
+
+@media screen and (orientation: portrait) {
+    #leaderboard {
+        &>main {
+            min-width: 75vw;
+        }
+    }
+}

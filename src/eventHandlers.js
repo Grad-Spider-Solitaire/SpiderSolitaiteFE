@@ -1,7 +1,7 @@
 import {boardState} from "./main.js";
 import {getSelectedCard, getSelectedCol} from "./selected.js";
 import {flipCard} from "../components/card/card.js";
-import {addScore, emptyColScore, suitCompleteScore, uncoveredScore} from "./scoring.js";
+import {addScore, emptyColScore, maxScore, suitCompleteScore, uncoveredScore} from "./scoring.js";
 
 const createEmpty = (col, dom) => {
   const empty = document.createElement('button');
@@ -47,7 +47,7 @@ export const validateForSelect = col => {
         element.remove();
       }, transition);
     });
-    addScore(suitCompleteScore);
+    if (addScore(suitCompleteScore) >= maxScore) document.getElementById('retire').click();
   }
   col.toReversed().forEach(({element, card}, index, array) => {
     if (!card) element.disabled = true;

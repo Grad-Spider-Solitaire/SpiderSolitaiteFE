@@ -1,5 +1,7 @@
 
-let score = 0;
+export const maxScore = 990;
+
+export let score = 0;
 
 export function addScore(number) {
   score += number;
