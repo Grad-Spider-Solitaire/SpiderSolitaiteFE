@@ -1,5 +1,8 @@
 @import "../components/card/card.css";
 @import "../components/board/board.css";
+@import "../components/deck/deck.css";
+@import "../components/banner/banner.css";
+@import "../components/leaderboard/leaderboard.css";
 
 * {
     box-sizing: border-box;
@@ -15,14 +18,32 @@ button {
 }
 
 :root {
-    overflow: hidden;
-    --color: black;
-    --card-width: min(9vw, 16vh);
+    font-family: 'Roboto', 'Arial Narrow', Arial, sans-serif;
+    padding: 1em;
+    background-image: radial-gradient( circle at 100% -20%,  rgba(255,255,255,20%) 0%, rgba(255,255,255,0%) 70% );
+    --card-width: min(8vw, 16vh);
     --card-ratio: 2.5/3.5;
     --card-height: calc(var(--card-width) / (var(--card-ratio)));
     min-height: 100vh;
     max-width: 100vw;
     color-scheme: dark;
+}
+
+body {
+    gap: 1em;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+
+@media screen and (orientation: portrait) {
+    :root {
+        --card-width: min(18vw, 10vh);
+    }
+
+    body {
+        flex-direction: column;
+    }
 }
 
 .container {

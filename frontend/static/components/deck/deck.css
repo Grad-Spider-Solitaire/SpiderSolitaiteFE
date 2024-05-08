@@ -1,0 +1,67 @@
+#deck {
+    min-width: var(--card-width);
+    height: var(--card-height);
+    flex-direction: column-reverse;
+    background: rgba(255, 255, 255, 20%);
+    border-radius: .5em;
+
+    &.dealing {
+        pointer-events: none;
+    }
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: none;
+
+        &>*:last-child .card::after {
+            outline: 1px solid white;
+        }
+    }
+
+    &:focus,
+    &:hover {
+        &>* {
+            scale: 110%;
+        }
+    }
+
+    &>* {
+        --transition-duration-ms: 1000ms;
+        transition: all var(--transition-duration-ms) ease-out, scale 50ms ease-in, margin 0s linear;
+
+        &:not(:last-child) {
+            margin-top: calc(var(--card-height) * -.998);
+        }
+
+        &.dealing {
+            margin-top: 0;
+            position: absolute;
+            --deal-index: 0;
+            --deal-row: 0;
+            --x-offset: 0;
+            --y-offset: 0;
+            top: calc(var(--y-offset) + var(--card-height) * .2 * var(--deal-row));
+            left: var(--x-offset);
+            z-index: var(--deal-index);
+        }
+    }
+}
+
+
+@media screen and (orientation: portrait) {
+    #deck {
+        &>* {
+            &.dealing {
+                top: var(--y-offset);
+                left: calc(var(--x-offset) + var(--card-width) * .15 * var(--deal-row));
+            }
+        }
+    }
+}

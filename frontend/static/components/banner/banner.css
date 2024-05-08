@@ -1,0 +1,34 @@
+#banner {
+    align-self: normal;
+    gap: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    &>h1 {
+        text-align: center;
+        font-size: 2rem;
+        margin: 0;
+    }
+
+    &>button {
+        border: 1px solid rgba(255, 255, 255, 25%);
+        padding: .5em;
+        border-radius: 2em;
+        background: rgba(255, 255, 255, 20%);
+
+        &:hover,
+        &:focus {
+            scale: 110%;
+        }
+    }
+}
+
+@media screen and (orientation: portrait) {
+    #banner {
+        &>h1 {
+            display: none;
+        }
+    }
+}

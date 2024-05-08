@@ -1,3 +1,5 @@
+import {initHandlers} from "../../src/eventHandlers.js";
+
 /**
  * @property {'spades'|'hearts'|'clubs'|'diamonds'} name
  * @property {string} color
@@ -10,11 +12,15 @@ export class Suit {}
  */
 export class Card {}
 
+const suitIcons = {};
+
 /**
  * @param {Suit} suit
  * @returns {Promise<string>}
  */
-const getIcon = async (suit) => await fetch(`/public/${suit.name}.svg`).then(value => value.text());
+const getIcon = async (suit) => {
+  return suitIcons[suit.name] ??= fetch(`/public/${suit.name}.svg`).then(value => value.text());
+};
 
 /**
  * @param {number} value
@@ -35,6 +41,13 @@ const getValue = (value) => {
   }
 }
 
+const bodyIcons = {
+  ace: {},
+  jack: {},
+  queen: {},
+  king: {},
+};
+
 /**
  * @param {Card} card
  * @returns {Promise<string>}
@@ -42,35 +55,53 @@ const getValue = (value) => {
 const getBody = async ({suit, value}) => {
   switch (value) {
     case 1:
-      return fetch(`/public/ace-of-${suit.name}.svg`).then(value => value.text())
+      return bodyIcons.ace[suit.name] ??= fetch(`/public/ace-of-${suit.name}.svg`).then(value => value.text());
     case 11:
-      return fetch(`/public/jack-of-${suit.name}.svg`).then(value => value.text())
+      return bodyIcons.jack[suit.name] ??= fetch(`/public/jack-of-${suit.name}.svg`).then(value => value.text());
     case 12:
-      return fetch(`/public/queen-of-${suit.name}.svg`).then(value => value.text())
+      return bodyIcons.queen[suit.name] ??= fetch(`/public/queen-of-${suit.name}.svg`).then(value => value.text());
     case 13:
-      return fetch(`/public/king-of-${suit.name}.svg`).then(value => value.text())
+      return bodyIcons.king[suit.name] ??= fetch(`/public/king-of-${suit.name}.svg`).then(value => value.text());
     default:
-      return Promise.all(Array.from({length: value}, async () => await fetch(`/public/${suit.name}.svg`).then(value => value.text())))
+      return Promise.all(Array.from({length: value}, async () => getIcon(suit)))
         .then(body => body.join('\n'))
   }
 }
 
+const cardTemplateString = fetch('/components/card/card.html')
+  .then(response => response.text());
+
 /**
  * @param {Card} card
- * @returns {Promise<HTMLDivElement>}
+ * @returns {Promise<HTMLButtonElement>}
  */
-export const createCardElement = ({suit, value}) => {
-  return fetch('/components/card/card.html')
-    .then(response => response.text())
-    .then(async card => card.replaceAll('{icon}', await getIcon(suit)))
-    .then(async card => card.replaceAll('{value}', getValue(value)))
-    .then(async card => card.replaceAll('{body}', await getBody({suit, value})))
-    .then(card => {
-      const wrapper = document.createElement('button');
-      wrapper.type = 'button';
-      wrapper.className = 'card-wrapper';
-      wrapper.innerHTML = card;
-      wrapper.style.setProperty('--color', suit.color)
-      return wrapper;
-    });
+export const createCardElement = async ({suit, value}) => {
+  const card = (await cardTemplateString).replaceAll('{icon}', await getIcon(suit))
+    .replaceAll('{value}', getValue(value))
+    .replaceAll('{body}', await getBody({suit, value}));
+  const wrapper = document.createElement('button');
+  wrapper.type = 'button';
+  wrapper.className = 'card-wrapper';
+  wrapper.innerHTML = card;
+  initHandlers(wrapper);
+  return wrapper;
+}
+
+/**
+ *
+ * @param {HTMLButtonElement} element
+ * @param {boolean} down
+ */
+export const flipCard = (element, down = true) => {
+  if (down) {
+    element.disabled = true;
+    if (!element.className.includes(' flipped')) element.className += ' flipped';
+  } else {
+    element.disabled = false;
+    element.className = element.className.replaceAll(' flipped', '');
+  }
+}
+
+export const isFlipped = element => {
+  return element.className.includes(' flipped');
 }

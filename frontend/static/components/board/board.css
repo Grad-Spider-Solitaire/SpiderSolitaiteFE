@@ -1,5 +1,4 @@
-.board {
-    padding: 1rem;
+#board {
     gap: 1vw;
 
     &>* {
@@ -10,7 +9,28 @@
             --x-rotation: 0;
             --y-rotation: 0;
 
+            &:focus-visible {
+                outline: none;
+
+                & .card::after,
+                & .card {
+                    outline: 1px solid white;
+                }
+            }
+
+            &.collapsing {
+                --transition-duration-ms: 1000ms;
+                --y-offset: 0;
+                --x-offset: 0;
+                position: relative;
+                transition: top calc(var(--transition-duration-ms)/2) ease-out, left calc(var(--transition-duration-ms)/2) ease-out, scale calc(var(--transition-duration-ms)/2) calc(var(--transition-duration-ms)/2) linear;
+                pointer-events: none;
+                top: var(--y-offset);
+                scale: 0;
+            }
+
             &.empty {
+                width: var(--card-width);
                 aspect-ratio: var(--card-ratio);
                 background: rgba(255, 255, 255, 10%);
                 border-radius: .5em;
@@ -32,7 +52,7 @@
                 cursor: no-drop;
             }
 
-            &:active {
+            &:active:not(:disabled) {
                 cursor: grabbing;
             }
         }
@@ -41,6 +61,29 @@
             transition: scale 50ms ease-in;
             &:not(:first-child){
                 margin-top: calc((var(--card-height) - var(--card-height) / 5) * -1);
+            }
+        }
+    }
+}
+
+@media screen and (orientation: portrait) {
+    #board {
+        flex-wrap: wrap;
+
+        &>.v-container {
+            flex: 1 0 40%;
+            flex-direction: row;
+
+            &>* {
+                &:not(:first-child){
+                    margin-top: 0;
+                    margin-left: calc(var(--card-width) * -.85);
+                }
+
+                &.collapsing {
+                    top: 0;
+                    left: var(--x-offset);
+                }
             }
         }
     }
