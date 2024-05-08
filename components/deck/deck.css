@@ -54,7 +54,7 @@
         &>* {
             &.dealing {
                 top: var(--y-offset);
-                left: calc(var(--x-offset) + var(--card-width) * .2 * var(--deal-row));
+                left: calc(var(--x-offset) + var(--card-width) * .15 * var(--deal-row));
             }
         }
     }
