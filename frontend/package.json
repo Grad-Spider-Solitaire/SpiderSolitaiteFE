@@ -1,0 +1,24 @@
+{
+  "name": "elastic-beanstalk-sample-app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "description": "Frontend for Spider Solitaire",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Grad-Spider-Solitaire/SpiderSolitaiteFE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Grad-Spider-Solitaire/SpiderSolitaiteFE/issues"
+  },
+  "homepage": "https://github.com/Grad-Spider-Solitaire/SpiderSolitaiteFE#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {}
+}
