@@ -1,6 +1,6 @@
 import {boardState} from "./main.js";
 import {getSelectedCard, getSelectedCol} from "./selected.js";
-import {flipCard} from "../components/card/card.js";
+import {flipCard, isFlipped} from "../components/card/card.js";
 import {addScore, emptyColScore, maxScore, suitCompleteScore, uncoveredScore} from "./scoring.js";
 
 const createEmpty = (col, dom) => {
@@ -25,7 +25,7 @@ export const validateForSelect = col => {
    * @returns {boolean}
    */
   const checkSeries = ({card, element}, index, array) => {
-    if (element.children.item(0).style.getPropertyValue('rotate')) return false; // covered cards not included
+    if (isFlipped(element)) return false; // covered cards not included
     if (index === 0) return true; // start of series
     return card.value + 1 === array.at(index - 1).card.value && card.suit === array.at(index - 1).card.suit;
   }
@@ -41,7 +41,8 @@ export const validateForSelect = col => {
       element.className += ' collapsing';
       element.style.setProperty('--transition-duration-ms', `${transition}ms`);
       setTimeout(() => {
-        element.style.top = `${target.top - current.top}px`; // in a timeout so transition occurs
+        element.style.setProperty('--y-offset', `${target.top - current.top}px`);
+        element.style.setProperty('--x-offset', `${target.left - current.left}px`);
       }, 0);
       setTimeout(() => {
         element.remove();
@@ -52,18 +53,16 @@ export const validateForSelect = col => {
   col.toReversed().forEach(({element, card}, index, array) => {
     if (!card) element.disabled = true;
     else if (index === 0) {
-      if (element.children.item(0).style.getPropertyValue('rotate')) addScore(uncoveredScore + (array.length === 1 ? emptyColScore : 0));
+      if (isFlipped(element)) addScore(uncoveredScore + (array.length === 1 ? emptyColScore : 0));
       flipCard(element, false);
     }
-    else if (element.children.item(0).style.getPropertyValue('rotate')) flipCard(element);
+    else if (isFlipped(element)) flipCard(element);
     else if (array.at(index -1).element.disabled) {
       element.disabled = true;
     }
     else if (card.suit === array.at(index - 1).card.suit && card.value === array.at(index - 1).card.value + 1) {
-      element.style.removeProperty('pointer-events');
       element.disabled = false;
     } else {
-      element.style.pointerEvents = 'none';
       element.disabled = true;
     }
   });
@@ -135,12 +134,11 @@ export const initHandlers = element => {
   const onMove = event => {
     const touch = event instanceof TouchEvent ? event.touches.item(0) : event;
     target = document.elementsFromPoint(touch.clientX, touch.clientY).find(item => boardState.some(col => col.some(({element: e}) => item === e)));
-    element.style.setProperty('left', `${touch.clientX - click.clientX}px`);
-    element.style.setProperty('top', `calc(${touch.clientY - click.clientY}px - 1rem)`);
+
     let styledElement = element;
     do {
-      styledElement.style.setProperty('left', `${touch.clientX - click.clientX}px`);
-      styledElement.style.setProperty('top', `calc(${touch.clientY - click.clientY}px)`);
+      styledElement.style.setProperty('--x-offset', `${touch.clientX - click.clientX}px`);
+      styledElement.style.setProperty('--y-offset', `${touch.clientY - click.clientY}px`);
       styledElement = styledElement.nextElementSibling;
     } while (styledElement);
   }
@@ -148,12 +146,9 @@ export const initHandlers = element => {
   const onGrabEnd = () => {
     let styledElement = element;
     do {
-      styledElement.className.replace(' grabbed', '')
-      styledElement.style.removeProperty('position');
-      styledElement.style.removeProperty('left');
-      styledElement.style.removeProperty('top');
-      styledElement.style.removeProperty('z-index');
-      styledElement.style.removeProperty('pointer-events');
+      styledElement.className = styledElement.className.replaceAll(' grabbed', '');
+      styledElement.style.removeProperty('--x-offset');
+      styledElement.style.removeProperty('--y-offset');
       styledElement = styledElement.nextElementSibling;
     } while (styledElement);
 
@@ -209,9 +204,7 @@ export const initHandlers = element => {
     let styledElement = element;
     boardState.forEach(col => validateForGrab(col, element));
     do {
-      styledElement.style.zIndex = '1';
-      styledElement.style.position = 'relative';
-      styledElement.style.pointerEvents = 'none';
+      styledElement.className += ' grabbed';
       styledElement = styledElement.nextElementSibling;
     } while (styledElement);
     window.addEventListener('mousemove', onMove);

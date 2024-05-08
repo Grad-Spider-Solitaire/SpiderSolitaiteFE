@@ -83,7 +83,6 @@ export const createCardElement = async ({suit, value}) => {
   wrapper.type = 'button';
   wrapper.className = 'card-wrapper';
   wrapper.innerHTML = card;
-  wrapper.style.setProperty('--color', suit.color);
   initHandlers(wrapper);
   return wrapper;
 }
@@ -96,11 +95,13 @@ export const createCardElement = async ({suit, value}) => {
 export const flipCard = (element, down = true) => {
   if (down) {
     element.disabled = true;
-    element.style.pointerEvents = 'none';
-    element.children.item(0).style.rotate = 'Y .5turn';
+    if (!element.className.includes(' flipped')) element.className += ' flipped';
   } else {
     element.disabled = false;
-    element.style.removeProperty('pointer-events');
-    element.children.item(0).style.removeProperty('rotate');
+    element.className = element.className.replaceAll(' flipped', '');
   }
+}
+
+export const isFlipped = element => {
+  return element.className.includes(' flipped');
 }

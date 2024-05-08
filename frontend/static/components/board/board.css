@@ -20,14 +20,17 @@
 
             &.collapsing {
                 --transition-duration-ms: 1000ms;
+                --y-offset: 0;
+                --x-offset: 0;
                 position: relative;
-                transition: top calc(var(--transition-duration-ms)/2) ease-out, scale calc(var(--transition-duration-ms)/2) calc(var(--transition-duration-ms)/2) linear;
+                transition: top calc(var(--transition-duration-ms)/2) ease-out, left calc(var(--transition-duration-ms)/2) ease-out, scale calc(var(--transition-duration-ms)/2) calc(var(--transition-duration-ms)/2) linear;
                 pointer-events: none;
-                top: 0;
+                top: var(--y-offset);
                 scale: 0;
             }
 
             &.empty {
+                width: var(--card-width);
                 aspect-ratio: var(--card-ratio);
                 background: rgba(255, 255, 255, 10%);
                 border-radius: .5em;
@@ -75,6 +78,11 @@
                 &:not(:first-child){
                     margin-top: 0;
                     margin-left: calc(var(--card-width) * -.85);
+                }
+
+                &.collapsing {
+                    top: 0;
+                    left: var(--x-offset);
                 }
             }
         }

@@ -10,7 +10,7 @@ import {score} from "./scoring.js";
 /**
  * @type {Readonly<Array<Suit>>}
  */
-const suits = Object.freeze([{name: 'spades', color: 'black'}, {name: 'hearts', color: 'red'}, {name: 'clubs', color: 'black'}, {name: 'diamonds', color: 'red'}]);
+const suits = Object.freeze([{name: 'spades'}, {name: 'hearts'}, {name: 'clubs'}, {name: 'diamonds'}]);
 
 const difficulty = window.confirm('1') ? 1 : window.confirm('2') ? 2 : 4;
 
