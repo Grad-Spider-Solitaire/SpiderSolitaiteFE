@@ -1,4 +1,4 @@
-const template = await fetch('/components/board/board.html')
+const template = fetch('/components/board/board.html')
   .then(response => response.text())
   .then(text => {
     const template = document.createElement('template');
@@ -6,8 +6,12 @@ const template = await fetch('/components/board/board.html')
     return template;
   });
 
-export const createBoard = () => {
-    const boardNode = template.content.cloneNode(true);
+/**
+ *
+ * @returns {Promise<HTMLElement>}
+ */
+export const createBoard = async () => {
+    const boardNode = (await template).content.cloneNode(true);
     document.body.appendChild(boardNode);
     return document.getElementById('board');
 }

@@ -2,7 +2,7 @@ import {flipCard} from "../card/card.js";
 import {validateForSelect} from "../../src/eventHandlers.js";
 import {boardState, deck} from "../../src/main.js";
 
-const template = await fetch('/components/deck/deck.html')
+const template = fetch('/components/deck/deck.html')
   .then(response => response.text())
   .then(text => {
     const template = document.createElement('template');
@@ -11,10 +11,10 @@ const template = await fetch('/components/deck/deck.html')
   });
 
 /**
- * @returns {HTMLElement}
+ * @returns {Promise<HTMLElement>}
  */
-export const createDeck = () => {
-    const deckNode = template.content.cloneNode(true);
+export const createDeck = async () => {
+    const deckNode = (await template).content.cloneNode(true);
     document.body.appendChild(deckNode);
     return document.getElementById('deck');
 }
@@ -25,7 +25,7 @@ export const createDeck = () => {
    */
 export const deal = (cards, down = 0) => {
   const deckDom = document.getElementById('deck');
-    deckDom.style.pointerEvents = 'none'
+    deckDom.style.pointerEvents = 'none';
     const deals = [];
     for (let index = 0; index < cards; index++) {
       const card = deck.pop();

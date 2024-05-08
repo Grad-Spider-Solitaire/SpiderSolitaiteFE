@@ -1,4 +1,4 @@
-const template = await fetch('/components/banner/banner.html')
+const template = fetch('/components/banner/banner.html')
   .then(response => response.text())
   .then(text => {
     const template = document.createElement('template');
@@ -7,10 +7,10 @@ const template = await fetch('/components/banner/banner.html')
   });
 
 /**
- * @returns {HTMLElement}
+ * @returns {Promise<HTMLElement>}
  */
-export const createBanner = () => {
-    const bannerNode = template.content.cloneNode(true);
+export const createBanner = async () => {
+    const bannerNode = (await template).content.cloneNode(true);
     document.body.appendChild(bannerNode);
     return document.getElementById('banner');
   }

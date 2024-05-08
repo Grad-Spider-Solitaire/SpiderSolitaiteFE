@@ -6,20 +6,27 @@ const template = await fetch('/components/leaderboard/leaderboard.html')
     return template;
   });
 
-const rowTemplateText = await fetch('/components/leaderboard/row.html')
+const rowTemplateText = fetch('/components/leaderboard/row.html')
   .then(response => response.text());
 
 /**
- * @returns {HTMLElement}
+ * @returns {Promise<HTMLTableElement>}
  */
-export const createLeaderboard = () => {
-  const leaderboardNode = template.content.cloneNode(true);
+export const createLeaderboard = async() => {
+  const leaderboardNode = (await template).content.cloneNode(true);
   document.body.appendChild(leaderboardNode);
   return document.getElementById('leaderboard');
 }
 
-export const createRow = (name, score, time) => {
-  const templatedText = rowTemplateText.replace('{name}', name)
+/**
+ *
+ * @param {string} name
+ * @param {string|number} score
+ * @param {string} time
+ * @returns {Promise<Node>}
+ */
+export const createRow = async (name, score, time) => {
+  const templatedText = (await rowTemplateText).replace('{name}', name)
     .replace('{score}', score)
     .replace('{time}', time);
   const template = document.createElement('template');
