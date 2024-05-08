@@ -34,7 +34,7 @@ jobs:
       run: aws s3 cp frontend_deploy_package.zip s3://466390025412-deploy-bucket
 
     - name: Create New API Version
-      run: aws elasticbeanstalk create-application-version --application-name nodejs-app --source-bundle S3Bucket="466390025412-deploy-bucket",S3Key="frontend_deploy_package.zip" --version-label "deploy-${{ github.sha }}" --description "commit-sha-${{ github.sha }}"
+      run: aws elasticbeanstalk create-application-version --application-name spidersolitaire-fe-app --source-bundle S3Bucket="466390025412-deploy-bucket",S3Key="frontend_deploy_package.zip" --version-label "deploy-${{ github.sha }}" --description "commit-sha-${{ github.sha }}"
 
     - name: Deploy API
       run: aws elasticbeanstalk update-environment --environment-name spidersolitaire-fe-env --version-label "deploy-${{ github.sha }}"
