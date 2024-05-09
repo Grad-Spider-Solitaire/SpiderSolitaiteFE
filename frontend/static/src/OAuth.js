@@ -7,7 +7,7 @@ export function signIn() {
   location.href = `https://accounts.google.com/o/oauth2/v2/auth?${new URLSearchParams({
     client_id:
       "475371833305-s13of6hvbgfnp18u7fn9gotn7pgurrlc.apps.googleusercontent.com",
-    redirect_uri: location.href,
+    redirect_uri: location.origin + location.pathname,
     response_type: "token id_token",
     scope: "profile email openid",
     state: "pass-through-value",
@@ -26,6 +26,7 @@ export function logout() {
   }
 
   localStorage.removeItem('accessToken');
+  localStorage.removeItem('idToken');
 
   return fetch("https://oauth2.googleapis.com/revoke?token=" + accessToken, {
     method: "POST",
@@ -39,8 +40,8 @@ export function logout() {
 }
 
 export const getJWT = () => {
-  if (location.search) {
-    const searchParams = new URLSearchParams(location.search); // Remove the '#' and parse hash fragment
+  if (location.hash) {
+    const searchParams = new URLSearchParams(location.hash);
     const idToken = searchParams.get("id_token");
     const accessToken = searchParams.get("access_token");
 
@@ -54,7 +55,10 @@ export const getJWT = () => {
         Authorization: `Bearer ${accessToken}`,
       },
     })
-      .then((data) => data.json());
+      .then(data => {
+        if (!data.ok) return null;
+        return data.json();
+      });
   } else {
     return new Promise((resolve) => {
       resolve(null);
