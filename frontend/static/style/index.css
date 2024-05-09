@@ -3,6 +3,8 @@
 @import "../components/deck/deck.css";
 @import "../components/banner/banner.css";
 @import "../components/leaderboard/leaderboard.css";
+@import "../components/login/login.css";
+@import "../components/difficulty/difficulty.css";
 
 * {
     box-sizing: border-box;

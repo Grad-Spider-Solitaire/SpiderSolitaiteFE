@@ -1,4 +1,5 @@
 #board {
+    align-self: center;
     gap: 1vw;
 
     &>* {
