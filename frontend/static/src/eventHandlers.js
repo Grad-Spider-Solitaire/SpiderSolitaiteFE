@@ -199,7 +199,7 @@ export const initHandlers = element => {
    */
   const onGrabStart = event => {
     event.preventDefault();
-    if (event.target.disabled) return;
+    if (event.currentTarget.disabled) return;
     if (event instanceof MouseEvent && event.button !== 0) return;
     click = event instanceof TouchEvent ? event.touches.item(0) : event;
     let styledElement = element;
