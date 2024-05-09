@@ -5,6 +5,131 @@
     background: rgba(255, 255, 255, 20%);
     border-radius: .5em;
 
+    &.vibing {
+        z-index: -1;
+        overflow: hidden;
+        height: unset;
+        background: none;
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+
+        &>*{
+            --animation-delay: 0;
+            --x-offset: 0;
+            position: absolute;
+            animation: slide 10s infinite linear;
+            animation-delay: var(--animation-delay);
+            translate: var(--x-offset);
+            top: -50vh;
+            right: -50vw;
+
+            &:nth-child(2) {
+                --x-offset: 50vw;
+                --animation-delay: .5s;
+            }
+
+            &:nth-child(3) {
+                --x-offset: -25vw;
+                --animation-delay: 1s;
+            }
+
+            &:nth-child(4) {
+                --x-offset: 34vw;
+                --animation-delay: 1.5s;
+            }
+
+            &:nth-child(5) {
+                --x-offset: -17vw;
+                --animation-delay: 2s;
+            }
+
+            &:nth-child(6) {
+                --x-offset: -50vw;
+                --animation-delay: 2.5s;
+            }
+
+            &:nth-child(7) {
+                --x-offset: 0vw;
+                --animation-delay: 3s;
+            }
+
+            &:nth-child(8) {
+                --x-offset: 12vw;
+                --animation-delay: 3.5s;
+            }
+
+            &:nth-child(9) {
+                --x-offset: -15vw;
+                --animation-delay: 4s;
+            }
+
+            &:nth-child(10) {
+                --x-offset: -9vw;
+                --animation-delay: 4.5s;
+            }
+
+            &:nth-child(11) {
+                --x-offset: 12vw;
+                --animation-delay: 5s;
+            }
+
+            &:nth-child(12) {
+                --x-offset: 24vw;
+                --animation-delay: 5.5s;
+            }
+
+            &:nth-child(13) {
+                --x-offset: 50vw;
+                --animation-delay: 6s;
+            }
+
+            &:nth-child(14) {
+                --x-offset: -40vw;
+                --animation-delay: 6.5s;
+            }
+
+            &:nth-child(15) {
+                --x-offset: -1vw;
+                --animation-delay: 7s;
+            }
+
+            &:nth-child(16) {
+                --x-offset: 49vw;
+                --animation-delay: 7.5s;
+            }
+
+            &:nth-child(17) {
+                --x-offset: 27vw;
+                --animation-delay: 8s;
+            }
+
+            &:nth-child(18) {
+                --x-offset: 50vw;
+                --animation-delay: 8.5s;
+            }
+
+            &:nth-child(19) {
+                --x-offset: -20vw;
+                --animation-delay: 9s;
+            }
+
+            &:nth-child(20) {
+                --x-offset: 0vw;
+                --animation-delay: 9.5s;
+            }
+
+            &:nth-child(n+21) {
+                display: none;
+            }
+
+            &>.card {
+                animation: spin 3s infinite linear;
+                animation-delay: var(--animation-delay);
+            }
+        }
+    }
+
     &.dealing {
         pointer-events: none;
     }
@@ -49,7 +174,7 @@
             --y-offset: 0;
             top: calc(var(--y-offset) + var(--card-height) * .2 * var(--deal-row));
             left: var(--x-offset);
-            z-index: var(--deal-index);
+            z-index: calc(var(--deal-index) + 1);
         }
     }
 }
@@ -63,5 +188,29 @@
                 left: calc(var(--x-offset) + var(--card-width) * .15 * var(--deal-row));
             }
         }
+    }
+}
+
+
+@keyframes spin {
+    0% {
+        rotate: X 0;
+    }
+
+    100% {
+        rotate: 1 2 1 -360deg;
+
+    }
+}
+
+@keyframes slide {
+    0% {
+        right: -50vw;
+        top: -50vh;
+    }
+
+    100% {
+        right: 150vw;
+        top: 150vh;
     }
 }
