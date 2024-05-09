@@ -15,6 +15,12 @@
         background: rgba(255, 255, 255, 25%);
         border: 1px solid rgba(255, 255, 255, 25%);
         gap: 1em;
+        transition: scale 100ms ease-in;
+
+        &:hover,
+        &:focus {
+            scale: 110%
+        }
     }
 }
 
@@ -23,4 +29,10 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+@media screen and (orientation: portrait) {
+    #difficulty {
+        min-width: 75vw;
+    }
 }

@@ -14,6 +14,12 @@
         background: rgba(255, 255, 255, 25%);
         border: 1px solid rgba(255, 255, 255, 25%);
         gap: 1em;
+        transition: scale 100ms ease-in;
+
+        &:hover,
+        &:focus {
+            scale: 110%
+        }
 
         &>svg {
             width: 2em;
