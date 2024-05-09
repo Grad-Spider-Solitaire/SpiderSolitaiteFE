@@ -7,10 +7,11 @@ import {createLeaderboard, createRow} from "../components/leaderboard/leaderboar
 import {score} from "./scoring.js";
 import {createLogin} from "../components/login/login.js";
 import {getJWT, logout, signIn} from "./OAuth.js";
+import {createDifficulty} from "../components/difficulty/difficulty.js";
 
 let jwt = await getJWT();
 
-if (jwt) { // TODO invert once oAuth fixed
+if (!jwt) {
   const login = await createLogin();
   login.querySelector('button').addEventListener('click', () => {
     signIn().then(async () => jwt = await getJWT());
@@ -26,12 +27,23 @@ if (jwt) { // TODO invert once oAuth fixed
   login.remove();
 }
 
+const difficultySelect = await createDifficulty();
+
+const difficulty = await new Promise (resolve => {
+  const difficulties = difficultySelect.getElementsByTagName('button');
+  for (let i = 0; i < difficulties.length; i++) {
+    difficulties.item(i).addEventListener('click', () => {
+      resolve(Math.pow(2, i));
+    }, {once: true})
+  }
+});
+
+difficultySelect.remove();
+
 /**
  * @type {Readonly<Array<Suit>>}
  */
 const suits = Object.freeze([{name: 'spades'}, {name: 'hearts'}, {name: 'clubs'}, {name: 'diamonds'}]);
-
-const difficulty = window.confirm('1') ? 1 : window.confirm('2') ? 2 : 4;
 
 const cards = Array.from({length: 8}, (_, i) => Array.from({length: 13}, (_, value) => ({suit: suits.at(i % difficulty), value: value + 1}))).flat();
 
@@ -98,6 +110,6 @@ bannerDom.children.namedItem('retire').addEventListener('click', async (event) =
   const okButton = leaderBoard.querySelector('button');
   okButton.addEventListener('click', () => {
     leaderBoard.remove();
-    logout(); // TODO nav to select screen
+    location.reload();
   })
 });

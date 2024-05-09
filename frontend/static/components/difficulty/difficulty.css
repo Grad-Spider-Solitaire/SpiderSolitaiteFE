@@ -1,0 +1,26 @@
+#difficulty {
+    justify-content: space-around;
+    padding: 1em;
+    border-radius: 2em;
+    background: rgba(255, 255, 255, 15%);
+    border: 1px solid rgba(255, 255, 255, 25%);
+    gap: 1em;
+    min-height: 50vh;
+    min-width: 50vw;
+
+
+    &>button {
+        padding: 1em;
+        border-radius: 2em;
+        background: rgba(255, 255, 255, 25%);
+        border: 1px solid rgba(255, 255, 255, 25%);
+        gap: 1em;
+    }
+}
+
+:root:has(#difficulty) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
