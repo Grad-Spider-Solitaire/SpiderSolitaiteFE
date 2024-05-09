@@ -8,7 +8,7 @@
 ## Introduction
 
 Spider Solitaire Frontend is an open-source software project designed to provide the user interface for the Spider Solitaire app. 
-![Project Screenshot](https://github.com/Grad-Spider-Solitaire/SpiderSolitaiteFE/assets/159271028/57bb5012-a28f-4b12-8b41-acfea8a43a66)
+![wijrvbgliuetrbvjuae]![Project Screenshot](https://github.com/Grad-Spider-Solitaire/SpiderSolitaiteFE/assets/159271028/57bb5012-a28f-4b12-8b41-acfea8a43a66)
 
 ## Features
 
