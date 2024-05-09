@@ -9,7 +9,7 @@
 
 Project Name is an open-source software project designed to [brief description of project purpose]. Its goal is to [brief description of goals]. This repository contains the codebase for [describe components/features].
 
-![Project Screenshot]![image](https://github.com/Grad-Spider-Solitaire/SpiderSolitaiteFE/assets/159271028/57bb5012-a28f-4b12-8b41-acfea8a43a66)
+![Project Screenshot](https://github.com/Grad-Spider-Solitaire/SpiderSolitaiteFE/assets/159271028/57bb5012-a28f-4b12-8b41-acfea8a43a66)
 
 ## Features
 
