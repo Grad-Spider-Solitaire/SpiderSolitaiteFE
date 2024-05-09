@@ -59,6 +59,21 @@ export const getJWT = () => {
         if (!data.ok) return null;
         return data.json();
       });
+  } else if (localStorage.getItem('idToken') && localStorage.getItem('accessToken')) {
+    const accessToken = localStorage.getItem('accessToken');
+    return fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then(data => {
+        if (!data.ok) {
+          localStorage.removeItem('idToken');
+          localStorage.removeItem('accessToken');
+          return null
+        }
+        return data.json();
+      });
   } else {
     return new Promise((resolve) => {
       resolve(null);

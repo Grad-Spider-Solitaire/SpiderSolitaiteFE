@@ -16,12 +16,21 @@
         border-radius: 2em;
 
         &>table {
+            min-height: 50%;
             align-self: center;
             border-spacing: 1em .5em;
             text-align: center;
             border: 2px solid white;
             border-radius: 2em;
             padding: 1em;
+
+            &  tr {
+                vertical-align: baseline;
+
+                &:last-child {
+                    height: 100%; /* aligns content to top of table */
+                }
+            }
         }
 
         &>button {

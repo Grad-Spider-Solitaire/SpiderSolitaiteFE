@@ -1,4 +1,4 @@
-import {createCardElement, Suit, Card, flipCard} from "../components/card/card.js";
+import {createCardElement, Card, flipCard} from "../components/card/card.js";
 import {createBanner} from "../components/banner/banner.js";
 import {createDeck, deal} from "../components/deck/deck.js";
 import {formatTime, startTimer, stopTimer, totalMilliseconds} from "./timer.js";
@@ -8,6 +8,17 @@ import {score} from "./scoring.js";
 import {createLogin} from "../components/login/login.js";
 import {getJWT, logout, signIn} from "./OAuth.js";
 import {createDifficulty} from "../components/difficulty/difficulty.js";
+import {getDifficulty, getHighScores, getUser, postScore} from "./api.js";
+import {getCards} from "./constants.js";
+
+const vibeDeck = createDeck();
+vibeDeck
+  .then(deck => {
+    deck.className += ' vibing';
+    getCards(4).sort(() => Math.random() -.5).forEach(async (card) => {
+      deck.appendChild(await createCardElement(card));
+    });
+  });
 
 let jwt = await getJWT();
 
@@ -15,7 +26,7 @@ if (!jwt) {
   const login = await createLogin();
   login.querySelector('button').addEventListener('click', () => {
     signIn().then(async () => jwt = await getJWT());
-  });
+  }, {once: true});
   while(!jwt) {
     jwt = await new Promise((resolve) => {
       login.querySelector('button')
@@ -26,6 +37,8 @@ if (!jwt) {
   }
   login.remove();
 }
+
+const user = getUser(jwt);
 
 const difficultySelect = await createDifficulty();
 
@@ -40,18 +53,13 @@ const difficulty = await new Promise (resolve => {
 
 difficultySelect.remove();
 
-/**
- * @type {Readonly<Array<Suit>>}
- */
-const suits = Object.freeze([{name: 'spades'}, {name: 'hearts'}, {name: 'clubs'}, {name: 'diamonds'}]);
-
-const cards = Array.from({length: 8}, (_, i) => Array.from({length: 13}, (_, value) => ({suit: suits.at(i % difficulty), value: value + 1}))).flat();
+const difficultyDetails = getDifficulty(difficulty);
+(await vibeDeck).remove();
 
 /**
  * @type {Array<{card: Card, element: HTMLButtonElement}>}
  */
-
-export const deck = await Promise.all(cards.map(async card => ({card, element: await createCardElement(card)})));
+export const deck = await Promise.all(getCards(difficulty).map(async card => ({card, element: await createCardElement(card)})));
 deck.sort(() => Math.random() - .5); // shuffling
 
 /**
@@ -86,25 +94,27 @@ await deal(54, 44);
 
 startTimer();
 bannerDom.children.namedItem('retire').addEventListener('click', async (event) => {
+  const highScores = getHighScores(difficulty);
   event.target.blur();
   stopTimer();
   const leaderBoard = await createLeaderboard();
   const leaderTable = leaderBoard.querySelector('table');
-  const leaderBoardScoring = [...Array.from({length: 5}, () => ({ // TODO get from API
-    name: 'john',
-    score: Math.floor(Math.random() * 990),
-    time: Math.floor(Math.random() * 100000),
-  })),
-    {name: 'Me', score, time: totalMilliseconds}].sort((a,b) => {
+  const leaderBoardScoring = [...(await highScores), {
+    username: (await user).username,
+    score,
+    game_duration: totalMilliseconds,
+  }].sort((a,b) => {
     if (a.score > b.score) return -1;
     else if (b.score > a.score) return 1;
-    else if (a.time < b.time) return -1;
-    else if (b.time < a.time) return 1;
+    else if (a.game_duration < b.game_duration) return -1;
+    else if (b.game_duration < a.game_duration) return 1;
     return 0;
-  }); // TODO get from API
+  });
 
-  for (const {score, name, time} of leaderBoardScoring) {
-    leaderTable.appendChild(await createRow(name, score, formatTime(time)));
+  await postScore(score, totalMilliseconds, (await user).id, (await difficultyDetails).id);
+
+  for (const {score, username, game_duration} of leaderBoardScoring) {
+    leaderTable.appendChild(await createRow(username, score, formatTime(game_duration)));
   }
 
   const okButton = leaderBoard.querySelector('button');
