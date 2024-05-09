@@ -5,7 +5,26 @@ import {formatTime, startTimer, stopTimer, totalMilliseconds} from "./timer.js";
 import {createBoard} from "../components/board/board.js";
 import {createLeaderboard, createRow} from "../components/leaderboard/leaderboard.js";
 import {score} from "./scoring.js";
+import {createLogin} from "../components/login/login.js";
+import {getJWT, logout, signIn} from "./OAuth.js";
 
+let jwt = await getJWT();
+
+if (jwt) { // TODO invert once oAuth fixed
+  const login = await createLogin();
+  login.querySelector('button').addEventListener('click', () => {
+    signIn().then(async () => jwt = await getJWT());
+  });
+  while(!jwt) {
+    jwt = await new Promise((resolve) => {
+      login.querySelector('button')
+        .addEventListener('click', () => {
+          resolve(signIn().then(async () => getJWT()));
+        }, {once: true});
+    });
+  }
+  login.remove();
+}
 
 /**
  * @type {Readonly<Array<Suit>>}
@@ -29,6 +48,8 @@ deck.sort(() => Math.random() - .5); // shuffling
 export const boardState = [[],[],[],[],[],[],[],[],[],[]];
 
 const bannerDom = await createBanner();
+
+bannerDom.children.namedItem('logout').addEventListener('click', () => logout());
 
 const deckDom = await createDeck();
 
@@ -62,7 +83,13 @@ bannerDom.children.namedItem('retire').addEventListener('click', async (event) =
     score: Math.floor(Math.random() * 990),
     time: Math.floor(Math.random() * 100000),
   })),
-    {name: 'Me', score, time: totalMilliseconds}].sort(({score: a}, {score: b}) => b - a); // TODO get from token
+    {name: 'Me', score, time: totalMilliseconds}].sort((a,b) => {
+    if (a.score > b.score) return -1;
+    else if (b.score > a.score) return 1;
+    else if (a.time < b.time) return -1;
+    else if (b.time < a.time) return 1;
+    return 0;
+  }); // TODO get from API
 
   for (const {score, name, time} of leaderBoardScoring) {
     leaderTable.appendChild(await createRow(name, score, formatTime(time)));
@@ -71,6 +98,6 @@ bannerDom.children.namedItem('retire').addEventListener('click', async (event) =
   const okButton = leaderBoard.querySelector('button');
   okButton.addEventListener('click', () => {
     leaderBoard.remove();
-    // TODO nav to select screen
+    logout(); // TODO nav to select screen
   })
 });
