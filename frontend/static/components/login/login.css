@@ -1,4 +1,5 @@
 #login {
+    text-shadow: 0 0 2px black;
     justify-content: space-around;
     padding: 1em;
     border-radius: 2em;
@@ -9,6 +10,7 @@
     min-width: 50vw;
 
     &>button {
+        text-shadow: 0 0 2px black;
         padding: 1em;
         border-radius: 2em;
         background: rgba(255, 255, 255, 25%);
