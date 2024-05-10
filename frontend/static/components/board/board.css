@@ -86,6 +86,20 @@
                     left: var(--x-offset);
                 }
             }
+
+            &:has(>*:nth-child(13))>*:not(:first-child) {
+                margin-left: calc(var(--card-width) * -.86);
+            }
+            &:has(>*:nth-child(14))>*:not(:first-child) {
+                margin-left: calc(var(--card-width) * -.87);
+            }
+            &:has(>*:nth-child(15))>*:not(:first-child) {
+                margin-left: calc(var(--card-width) * -.88);
+            }
+            &:has(>*:nth-child(16))>*:not(:first-child) {
+                margin-left: calc(var(--card-width) * -.89);
+            }
+            /* we give up here, for usability sake */
         }
     }
 }
